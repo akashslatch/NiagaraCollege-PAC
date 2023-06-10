@@ -1,0 +1,139 @@
+﻿@model NCPAC_LambdaX.Models.Meeting
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Meeting</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="MeetingTitle" class="control-label"></label>
+                <input asp-for="MeetingTitle" class="form-control" />
+                <span asp-validation-for="MeetingTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeFrom" class="control-label"></label>
+                <input asp-for="TimeFrom" class="form-control" />
+                <span asp-validation-for="TimeFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Meeting Duration (Min) </label>
+                <input asp-for="Minitues" class="form-control" />
+                <span asp-validation-for="Minitues" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="CommiteeID" class="control-label"></label>
+                <select class="form-control" id="CommiteeID" name="CommiteeID" asp-items="ViewBag.CommiteeID">
+                </select>
+                <span asp-validation-for="CommiteeID" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsCancelled" /> <label>Was Cancelled</label>
+                </label>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label"> Current Documents:</label>
+                <div class="ml-md-3">
+                    @{
+                        int fileCount = Model.MeetingDocuments.Count;
+                        if (fileCount > 0)
+                        {
+                            var firstFile = Model.MeetingDocuments.FirstOrDefault(); ;
+                            if (fileCount > 1)
+                            {
+                                <a class="" role="button" data-bs-toggle="collapse" href="#collapseDocs@(Model.ID)" aria-expanded="false" aria-controls="collapseDocs@(Model.ID)">
+                                    Uploaded Files <span class="badge bg-info">@fileCount</span>
+                                </a>
+                                <div class="collapse" id="collapseDocs@(Model.ID)">
+                                    @{
+                                        foreach (var d in Model.MeetingDocuments)
+                                        {
+                                            <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label custom-file-label">Upload Meeting Minitues:</label>
+                <input type="file" class="form-control" name="theFiles" multiple="multiple">
+            </div>
+            <br/>
+            <div class="form-group">
+                <label class="control-label"> Current ActionItems:</label>
+                <div class="ml-md-3">
+                @{
+                    int playCount2 = Model.ActionItems.Count;
+                    if (playCount2 > 0)
+                    {
+                        string firstPlay2 = Model.ActionItems.FirstOrDefault().ActionItemTitle;
+                        if (playCount2 > 1)
+                        {
+                            string playList2 = "";
+                            var c = Model.ActionItems.ToList();
+                            for (int i = 1; i < playCount2; i++)//Skip the first because we have it already
+                            {
+                                playList2 += c[i].ActionItemTitle + " <br />";
+                            }
+                        <a class="" role="button" data-bs-toggle="collapse" href="#collapseHistory@(Model.ID)"
+                           aria-expanded="false" aria-controls="collapseHistory@(Model.ID)">
+                                @firstPlay2 <span class="badge bg-info">@playCount2</span>
+                        </a>
+                        <div class="collapse" id="collapseHistory@(Model.ID)">
+                                @Html.Raw(playList2)
+                        </div>
+                        }
+                        else
+                        {
+                            @firstPlay2
+                        }
+                    }
+                }
+                </div>
+            </div>
+            <br />
+            <a href="../../ActionItems/Create" class="btn btn-dark" data-placement="right" title="Click the button to create new Action Item">Create New Action Item</a>
+            <br />
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/refreshDDL.js"></script>
+}
+

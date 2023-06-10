@@ -1,0 +1,161 @@
+﻿@model NCPAC_LambdaX.ViewModels.MemberVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Member</h4>
+<hr />
+<div class="row">
+    <div class="col-md-20">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="row">
+            <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Salutation" class="control-label"></label>
+                <input asp-for="Salutation" class="form-control" />
+                <span asp-validation-for="Salutation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetAddress" class="control-label"></label>
+                <input asp-for="StreetAddress" class="form-control" />
+                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProvinceID" class="control-label"></label>
+                <select class="form-control" id="ProvinceID" name="ProvinceID" asp-items="ViewBag.ProvinceID">
+                    <option>None</option>
+                </select>
+                <span asp-validation-for="ProvinceID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostalCode" class="control-label"></label>
+                <input asp-for="PostalCode" class="form-control" placeholder="eg: A1A1B1"/>
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="eg: example@example.com"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>            
+            </div>
+            <div class="col-md-4">            
+            <label><b>Work Information</b></label>
+            <br />
+            <div class="border border-dark" style="padding:2%">
+            <div class="form-group">
+                <label asp-for="WorkStreetAddress" class="control-label"></label>
+                <input asp-for="WorkStreetAddress" class="form-control" />
+                <span asp-validation-for="WorkStreetAddress" class="text-danger"></span>
+            </div>          
+            <div class="form-group">
+                <label asp-for="WorkCity" class="control-label"></label>
+                <input asp-for="WorkCity" class="form-control" />
+                <span asp-validation-for="WorkCity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkProvinceID" class="control-label"></label>
+                <select class="form-control" id="WorkProvinceID" name="ProvinceID" asp-items="ViewBag.WorkProvinceID">
+                    <option>None</option>
+                </select>
+                <span asp-validation-for="WorkProvinceID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkPostalCode" class="control-label"></label>
+                <input asp-for="WorkPostalCode" class="form-control" placeholder="eg: A1A1B1"/>
+                <span asp-validation-for="WorkPostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkPhone" class="control-label"></label>
+                <input asp-for="WorkPhone" class="form-control" />
+                <span asp-validation-for="WorkPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkEmail" class="control-label"></label>
+                <input asp-for="WorkEmail" class="form-control" placeholder="eg: example@example.com"/>
+                <span asp-validation-for="WorkEmail" class="text-danger"></span>
+            </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="MailPrefferenceID" class="control-label"></label>
+                <select class="form-control" id="MailPrefferenceID" name="MailPrefferenceID" asp-items="ViewBag.MailPrefferenceID">
+                </select>
+                <span asp-validation-for="MailPrefferenceID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EducationalSummary" class="control-label"></label>
+                @Html.TextAreaFor(model => model.EducationalSummary, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="EducationalSummary" class="text-danger"></span>
+            </div>           
+            </div> 
+            <div class="col-md-4">                             
+            <div class="form-group">
+                <label asp-for="OccupationalSummary" class="control-label"></label>
+                @Html.TextAreaFor(model => model.OccupationalSummary, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="OccupationalSummary" class="text-danger"></span>
+            </div> 
+            <div class="form-group" style="margin-top:2%">
+                
+                
+            <div class="form-group">
+                <label class="control-label" style="margin-top:3%"><b>@Html.DisplayNameFor(model => model.IsNCGrad)</b> : &nbsp;</label>
+                <input asp-for="IsNCGrad" />
+                <span asp-validation-for="IsNCGrad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" style="margin-top:3%">The email of your account cannot be updated from only here. It might cause login issues. <b>Please go through this link to update your account login email if required</b> &nbsp;</label>
+                <a href="../../Identity/Account/Manage/Email" style="text-decoration:none;">Email Update</a>
+            </div>
+            </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<div>
+    <br />
+    <a asp-action="Index" class="btn btn-secondary" style="margin-top:1%">Cancal</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+

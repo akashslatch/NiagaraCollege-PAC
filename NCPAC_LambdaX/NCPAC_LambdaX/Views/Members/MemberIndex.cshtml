@@ -1,0 +1,203 @@
+﻿@model IEnumerable<NCPAC_LambdaX.ViewModels.MemberAdminVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Members of your PAC/ PACs</h1>
+<hr />
+<form asp-action="MemberIndex" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" id="filterToggle" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" tooltip="Toggle the Filter Pane" flow="right">
+            Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search By Name:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Filter NC Grads:</label><br />
+                        @Html.CheckBox("IsNCGrad", false, htmlAttributes: new { @class="checkbox" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="control-label">Search Email:</label>
+                            @Html.TextBox("SearchString2", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="container-fluid d-block d-md-none">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="card mb-sm-3" style="min-width: 18rem;">
+                    <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.MemberName)</strong></h5>
+                    <div class="card-body">
+                            <figcaption class="col">
+                                <p class="card-text">
+                                    <dl class="row lh-1">
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.Email)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                            @Html.DisplayFor(model => item.Email)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.IsNCGrad)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.IsNCGrad)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.MemberCommitees)
+                                    </dt>
+                                    <dd>
+                                        @{
+                                            int playCount = item.MemberCommitees.Count;
+                                            if (playCount > 0)
+                                            {
+                                                string firstPlay = item.MemberCommitees.FirstOrDefault().Commitee.CommiteeName;
+                                                if (playCount > 1)
+                                                {
+                                                    string playList = "";
+                                                    var c = item.MemberCommitees.ToList();
+                                                    for (int i = 1; i < playCount; i++)//Skip the first because we have it already
+                                                    {
+                                                        playList += c[i].Commitee.CommiteeName + " <br />";
+                                                    }
+                                                    <a class="" role="button" data-bs-toggle="collapse" href="#collapseHistory@(item.ID)"
+                                           aria-expanded="false" aria-controls="collapseHistory@(item.ID)">
+                                                        @firstPlay <span class="badge bg-info">@playCount</span>
+                                                    </a>
+                                                    <div class="collapse" id="collapseHistory@(item.ID)">
+                                                        @Html.Raw(playList)
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    @firstPlay
+                                                }
+                                            }
+                                        }
+                                    </dd>
+                                    </dl>
+                                </p>
+                            </figcaption>
+                        
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+    <div class="d-none d-md-block">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Member" class="btn btn-outline-dark" />
+                </th>
+                <th>
+                    <input type="submit" disabled="disabled" value="Email" class="btn btn-outline-dark" />
+                </th>
+                <th>
+                    <input type="submit" disabled="disabled" value="Is NC Grad?" class="btn btn-outline-dark" />
+                </th>
+                <th>
+                    <input type="submit" disabled="disabled" value="Committees" class="btn btn-outline-dark" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberName)
+                </td>
+                <td>
+                        @{
+                            if ((item.Email != null) && (item.WorkEmail != null))
+                            {
+                                if((item.MailPrefferenceID == "Work") || (item.MailPrefferenceID == "work"))
+                                {
+                                        @Html.DisplayFor(modelItem => item.WorkEmail)
+                                }
+                                else if ((item.MailPrefferenceID == "Personnal") || (item.MailPrefferenceID == "personnal"))
+                                {
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                }
+                                else
+                                {
+                                        @Html.DisplayFor(modelItem => item.WorkEmail)
+                                }
+                            
+                            }
+                            else{
+                        
+                                if ((item.Email == null) && (item.WorkEmail != null))
+                                {
+                                        @Html.DisplayFor(modelItem => item.WorkEmail)
+                                }
+                                else if ((item.Email != null) && (item.WorkEmail == null))
+                                {
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                }
+                            }
+                         }
+                </td>
+                <td>
+                        @Html.CheckBoxFor(modelItem => item.IsNCGrad, new { @disabled = "disabled"})
+                </td>
+                <td>
+                    @{
+                        int playCount = item.MemberCommitees.Count;
+                        if (playCount > 0)
+                        {
+                            string firstPlay = item.MemberCommitees.FirstOrDefault().Commitee.CommiteeName;
+                            if (playCount > 1)
+                            {
+                                string playList = "";
+                                var c = item.MemberCommitees.ToList();
+                                for (int i = 1; i < playCount; i++)//Skip the first because we have it already
+                                {
+                                    playList += c[i].Commitee.CommiteeName + " <br />";
+                                }
+                                    <a class="" role="button" data-bs-toggle="collapse" href="#collapseHistory@(item.ID)"
+                            aria-expanded="false" aria-controls="collapseHistory@(item.ID)">
+                                        @firstPlay <span class="badge bg-info">@playCount</span>
+                                    </a>
+                                    <div class="collapse" id="collapseHistory@(item.ID)">
+                                        @Html.Raw(playList)
+                                    </div>
+                            }
+                            else
+                            {
+                                    @firstPlay
+                            }
+                        }
+                    }
+                </td>
+
+            </tr>
+    }
+        </tbody>
+    </table>
+    </div>
+    <partial name="_PagingNavBar" />
+</form>

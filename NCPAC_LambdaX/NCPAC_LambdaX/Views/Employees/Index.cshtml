@@ -1,0 +1,110 @@
+﻿@model IEnumerable<NCPAC_LambdaX.ViewModels.EmployeeAdminVM>
+@{
+    ViewData["Title"] = "Employee Index";
+}
+
+<h2>Staff Members</h2>
+
+<p>
+    <a asp-action="DownloadEmployees" class="btn btn-info float-end" tooltip="Download a Staff Excel Report." flow="left">Download Staff Report</a>
+    <a asp-action="Create" class="btn btn-primary" tooltip="Add new Staff Members" flow="right">Create New</a>
+</p>
+
+<div class="text-danger">@TempData["message"]</div>
+
+<br />
+<div class="container-fluid d-block d-md-none">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-sm-3" style="min-width: 18rem;">
+                <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.FormalName)</strong></h5>
+                <div class="card-body">
+                    <figcaption class="col">
+                        <p class="card-text">
+                            <dl class="row lh-1">
+                                <dt class="col-8">
+                                    @Html.DisplayNameFor(model => item.Email)
+                                </dt>
+                                <dd class="col-4 text-truncate">
+                                    @Html.DisplayFor(model => item.Email)
+                                </dd>
+                                <dt class="col-8">
+                                    @Html.DisplayNameFor(model => item.Phone)
+                                </dt>
+                                <dd class="col-4 text-truncate">
+                                    @Html.DisplayFor(model => item.Phone)
+                                </dd>
+                                <dt class="col-8">
+                                    @Html.DisplayNameFor(model => item.UserRoles)
+                                </dt>
+                                <dd class="col-4 text-truncate">
+                                    @Html.DisplayFor(model => item.UserRoles)
+                                </dd>
+                                <dt class="col-8">
+                                    @Html.DisplayNameFor(model => item.Active)
+                                </dt>
+                                <dd class="col-4 text-truncate">
+                                    @Html.DisplayFor(model => item.Active)
+                                </dd>
+                            </dl>
+                        </p>
+                    </figcaption>
+
+                    <div class="card-footer">
+                        <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID">Edit</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="d-none d-lg-block">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)<br />
+                    Email: @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @{
+                        foreach (var r in item.UserRoles)
+                        {
+                            @:  @r <br />
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                   <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

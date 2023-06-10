@@ -1,0 +1,159 @@
+﻿@model IEnumerable<NCPAC_LambdaX.Models.Meeting>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Meetings</h1>
+
+
+
+@if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+{
+    <p>
+        <a asp-action="DownloadMeetings" class="btn btn-info float-end" tooltip="Download a Full Meetings Report" flow="left">Download Meetings Report</a>
+        <a asp-action="Create" class="btn btn-primary" tooltip="Add new Meetings" flow="right">Create New</a>
+    </p>
+}
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" id="filterToggle" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" tooltip="Toggle the Filter Pane" flow="right">
+            Filter/Search
+        </button>
+        <div class="collapse" @(ViewData["Filtering"]) id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search By Title:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Select by Commitee:</label>
+                        @Html.DropDownList("CommiteeID", null, "All Commitees", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <label class="control-label">Show Canceled Meetings:</label><br />
+                            @Html.CheckBox("ShowCanceled", false, htmlAttributes: new { @class="checkbox" })
+                        </div>
+                        <div class="form-group col-md-2 align-self-end">
+                            <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary"/>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="container-fluid d-block d-md-none">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="card mb-sm-3" style="min-width: 18rem;">
+                    <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.MeetingTitle)</strong></h5>
+                    <div class="card-body">
+                        <figcaption class="col">
+                            <p class="card-text">
+                                <dl class="row lh-1">
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.TimeFrom)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.TimeFrom)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.Minitues)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.Minitues)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.Commitee.CommiteeName)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.Commitee.CommiteeName)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.IsCancelled)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.IsCancelled)
+                                    </dd>
+                                </dl>
+                            </p>
+                        </figcaption>
+
+                        <div class="card-footer">
+                            <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.ID">Details</a>
+                            @if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+                            {
+                                <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID"> Edit </a>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="d-none d-md-block">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <input type="submit" name="actionButton" value="Meeting" class="btn btn-outline-dark" />
+            </th>
+            <th>
+                <input type="submit" name="actionButton" value="TimeFrom" class="btn btn-outline-dark" />
+            </th>
+            <th>
+                <label>Duration (Mins)</label>
+            </th>
+            <th>
+                <label>Commitee</label>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCancelled)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeetingTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Minitues)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commitee.CommiteeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCancelled)
+            </td>
+            <td>
+                <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.ID" tooltip="Details of the meeting">Details</a>
+                @if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+                {
+                    <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID" tooltip="Edit this Meering"> Edit </a>
+
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+    <partial name="_PagingNavBar" />
+</form>
+

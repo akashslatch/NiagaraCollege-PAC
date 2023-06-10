@@ -1,0 +1,173 @@
+﻿@model IEnumerable<NCPAC_LambdaX.Models.ActionItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Action Items</h1>
+
+@if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary" tooltip="Add new Action Items" flow="right">Create New</a>
+    </p>
+}
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" id="filterToggle" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" tooltip="Toggle the Filter Pane" flow="right">
+            Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search By Action:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Search By Description:</label>
+                        @Html.TextBox("SearchString2", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">   
+                    
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Show Completed ActionItems:</label><br />
+                        @Html.CheckBox("IsCompleted", false, htmlAttributes: new { @class="checkbox" })
+                    </div>
+                    @if ((User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Supervisor")) == false)
+                    {
+                        <div class="form-group col-md-5">
+                            <label class="control-label">Search By Member:</label>
+                            @Html.TextBox("SearchString3", null, new { @class = "form-control" })
+                        </div>
+                    }                   
+                    <div class="form-group col-md-2 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="container-fluid d-block d-md-none">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="card mb-sm-3" style="min-width: 18rem;">
+                    <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.ActionItemTitle)</strong></h5>
+                    <div class="card-body">
+                        <figcaption class="col">
+                            <p class="card-text">
+                                <dl class="row lh-1">
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.Member.MemberName)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.Member.MemberName)
+                                    </dd>
+                                    <dd class="col-8">
+                                        <label><b>Meeting Title</b></label>
+                                    </dd>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.Meeting.MeetingTitle)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.TimeAppointed)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.TimeAppointed)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.TimeUntil)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.TimeUntil)
+                                    </dd>
+                                    <dt class="col-8">
+                                        @Html.DisplayNameFor(model => item.IsCompleted)
+                                    </dt>
+                                    <dd class="col-4 text-truncate">
+                                        @Html.DisplayFor(model => item.IsCompleted)
+                                    </dd>
+                                </dl>
+                            </p>
+                        </figcaption>
+
+                        <div class="card-footer">
+                            <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.ID">Details</a>
+                            <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID">Edit</a>
+                            @if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+                            {
+
+                                <a asp-action="Delete" class="btn btn-secondary" asp-route-id="@item.ID">Delete</a>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="d-none d-lg-block">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionItemTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meeting)
+            </th>
+            <th>
+                <input type="submit" name="actionButton" value="Member" class="btn btn-outline-dark" />
+            </th>
+            <th>
+                <input type="submit" name="actionButton" value="TimeUntil" class="btn btn-outline-dark" />
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCompleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionItemTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Meeting.MeetingTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.MemberName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeUntil)                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCompleted)
+            </td>
+            <td>
+                <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.ID">Details</a>
+                <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.ID">Edit</a>
+                @if ((User.IsInRole("Admin")) || (User.IsInRole("Supervisor")) || (User.IsInRole("Staff")))
+                {
+
+                    <a asp-action="Delete" class="btn btn-secondary" asp-route-id="@item.ID">Delete</a>
+
+                }
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+    <partial name="_PagingNavBar" />
+</form>

@@ -1,0 +1,79 @@
+﻿@model NCPAC_LambdaX.Models.Meeting
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Meeting</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MeetingTitle" class="control-label"></label>
+                <input asp-for="MeetingTitle" class="form-control" />
+                <span asp-validation-for="MeetingTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommiteeID" class="control-label"></label>
+                <select class="form-control" id="CommiteeID" name="CommiteeID" asp-items="ViewBag.CommiteeID">
+                </select>
+                <span asp-validation-for="CommiteeID" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+            <div class="form-group">
+                <label asp-for="TimeFrom" class="control-label"></label>
+                <input asp-for="TimeFrom" class="form-control" />
+                <span asp-validation-for="TimeFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Duration (Mins)</label>
+                <input asp-for="Minitues" class="form-control" />
+                <span asp-validation-for="Minitues" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsCancelled" /> <label>Was Cancelled</label>
+                </label>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label custom-file-label">Upload Documents:</label>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" name="theFiles" multiple="multiple">
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/multiselect1.js"></script>
+    <script src="~/js/refreshDDL.js"></script>
+}
+
+
+
