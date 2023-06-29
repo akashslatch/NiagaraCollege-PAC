@@ -1,9 +1,6 @@
 Sample Usernames and Passwords for roles
 NCPAC - Group 02 
 
-Admin Login
-Email : admin@outlook.com
-Pa55w@rd : LambdaX123@
 
 Supervisor Login
 Email : supervisor@outlook.com
